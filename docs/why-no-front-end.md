@@ -1,24 +1,9 @@
-# Why there is no front end
+# A support desk built from records
 
-Zendesk is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+The database holds customers, tickets, notes, deadlines and escalations. Claude Code, Codex, OpenCode or Cursor runs the same commands against it. Reports and documents are read-only HTML snapshots in your brand.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+A screen gives a team a shared live inbox, drag-and-drop assignment, mobile handling and a customer portal. This free version supplies none of those channels, offline mobile sync or automatic email intake. It is useful for a small operations desk that records incoming work and reviews it through commands. Replies are drafted here and sent in an existing approved channel.
 
-## What you gain
+Use npm run view for the week, customer outcomes and escalations. Use npm run docs for case briefs, escalation sheets and customer reviews. Your first customisation can add the fields and reports that explain your own repeat issues.
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
-
-## What you give up
-
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
-
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep Zendesk. If you need the answers more than the screens, this is cheaper, faster and yours.
-
-Installed and run for you: https://enterprisedna.co/omni/instead-of/zendesk
+Omni by Enterprise DNA can build your connections, customer screens and shared access as part of the scoped version it runs for you. Agree those requirements and test the full workflow before retiring Zendesk.

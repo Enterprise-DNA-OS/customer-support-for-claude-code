@@ -1,0 +1,3 @@
+ID,Requester,Requester email,Assignee,Group,Subject,Tags,Status,Priority,Via,Created at,Updated at,Organization,Due date,Solved at,Satisfaction Score,Reopens,First reply time in minutes,Custom product
+901,Demo contact,demo@example.invalid,Alex,Wholesale,"Dispatch, export sample",dispatch,Open,High,email,2026-01-01 09:00:00,2026-01-03 10:00:00,Export Demo,2026-01-05 12:00:00,,,1,60,Widget A
+902,Demo contact,demo@example.invalid,Alex,Wholesale,Resolved demo enquiry,returns,Solved,Normal,email,2026-01-02 09:00:00,2026-01-04 10:00:00,Export Demo,,2026-01-03 09:00:00,Good,0,30,Widget B

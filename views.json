@@ -1,13 +1,35 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Customer Support for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Support desk this week",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Queue",
+        "sql": "select reference,customer,subject,status,priority,assignee,quiet_days from support_queue order by quiet_days desc"
+      },
+      {
+        "title": "Service deadlines",
+        "sql": "select reference,customer,obligation,due_at from deadline_queue order by due_at"
+      }
+    ]
+  },
+  {
+    "name": "customers",
+    "title": "Customer service review",
+    "sections": [
+      {
+        "title": "Outcomes",
+        "sql": "select customer,owner,total_tickets,open_tickets,waiting_customer,reopens,unhappy,first_reply_hours,resolution_hours from customer_service order by customer"
+      }
+    ]
+  },
+  {
+    "name": "escalations",
+    "title": "Escalation desk",
+    "sections": [
+      {
+        "title": "Open actions",
+        "sql": "select t.subject,e.reason,e.owner,e.due_at from escalations e join tickets t on t.id=e.ticket_id where e.resolved_at is null order by e.due_at"
       }
     ]
   }

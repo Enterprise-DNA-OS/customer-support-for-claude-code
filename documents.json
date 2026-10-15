@@ -1,11 +1,52 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "case-brief",
+    "title": "Internal support case brief",
+    "for_each": "select id,subject from tickets order by subject",
+    "file": "subject",
+    "sections": [
+      {
+        "title": "Ticket",
+        "sql": "select t.subject,c.name as customer,t.requester,t.assignee,t.status,t.priority,t.description from tickets t join customers c on c.id=t.customer_id where t.id=$1"
+      },
+      {
+        "title": "Recorded history",
+        "note": "Internal working document. Review before sharing. Imported CSV does not contain the original conversation.",
+        "sql": "select kind,body,actor,occurred_at from notes where ticket_id=$1 order by occurred_at"
+      },
+      {
+        "title": "Service commitments",
+        "sql": "select reply_due_at,first_replied_at,resolution_due_at,task_due_at,solved_at from tickets where id=$1"
+      }
+    ]
+  },
+  {
+    "name": "escalation-sheet",
+    "title": "Internal escalation action sheet",
+    "for_each": "select id,subject from tickets where exists(select 1 from escalations e where e.ticket_id=tickets.id) order by subject",
+    "file": "subject",
+    "sections": [
+      {
+        "title": "Actions and outcome",
+        "sql": "select reason,owner,due_at,resolution,resolved_at from escalations where ticket_id=$1 order by due_at"
+      }
+    ]
+  },
+  {
+    "name": "service-review",
+    "title": "Customer service review",
+    "for_each": "select id,name from customers order by name",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Recorded outcomes",
+        "note": "All-time metrics on available records. Calendar hours, not business hours. Missing reply history is excluded from averages.",
+        "sql": "select customer,owner,total_tickets,open_tickets,waiting_customer,reopens,unhappy,first_reply_hours,resolution_hours from customer_service where id=$1"
+      },
+      {
+        "title": "Open support cases",
+        "sql": "select subject,status,priority,assignee,reply_due_at,resolution_due_at from tickets where customer_id=$1 and status not in ('solved','closed') order by opened_at"
+      }
     ]
   }
 ]
