@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs';import path from 'node:path';import {createHash,randomUUID} from 'node:crypto';import {pathToFileURL} from 'node:url';
 import {getDb,REPO_ROOT} from './lib/db.mjs';import {convertCsv,timestamp} from './lib/import-zendesk.mjs';
+import {table as textTable} from './lib/format.mjs';
 export const readCommands=['customers','queue','ticket','deadlines','waiting','workload','repeat-issues','service-review','escalations','compliance','attention','activity','weekly-review'];
 export const commands=[...readCommands,'add-customer','add-ticket','assign','set-status','set-deadlines','log-note','log-reply','escalate','resolve-escalation','review-retention','draft-reply','import','export','help'];
 const spec={
@@ -148,12 +149,12 @@ export async function dispatch(db,args){
 }
 function stable(x){if(Array.isArray(x))return JSON.stringify(x.map(stable));if(x&&typeof x==='object')return JSON.stringify(Object.fromEntries(Object.keys(x).sort().map(k=>[k,stable(x[k])])));return JSON.stringify(x);}
 export function human(data){
+ const value=x=>x==null?'':x instanceof Date?x.toISOString().slice(0,16).replace('T',' ')+' UTC':typeof x==='object'?JSON.stringify(x):String(x);
  if(Array.isArray(data)){
   if(!data.length)return 'Nothing here.';
-  const cols=Object.keys(data[0]),v=x=>x==null?'':typeof x==='object'?JSON.stringify(x):String(x);
-  return [cols.join(' | '),cols.map(()=> '---').join(' | '),...data.map(r=>cols.map(c=>v(r[c]).replace(/\n/g,' ')).join(' | '))].join('\n');
+  return textTable(data,Object.keys(data[0]).map(key=>({key,label:key.replaceAll('_',' '),format:x=>value(x).replace(/\n/g,' ')})));
  }
- return Object.entries(data).map(([k,v])=>`${k}\n${Array.isArray(v)||v&&typeof v==='object'?human(v):v}`).join('\n\n');
+ return Object.entries(data).map(([k,v])=>`${k}\n${!(v instanceof Date)&&(Array.isArray(v)||v&&typeof v==='object')?human(v):value(v)}`).join('\n\n');
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
  let db;try{const args=process.argv.slice(2);parse(args);db=await getDb();const result=await dispatch(db,args);console.log(args.includes('--json')?JSON.stringify(result,null,2):human(result));}catch(e){console.error(e.message);process.exitCode=1;}finally{if(db)await db.close();}
